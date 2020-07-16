@@ -1,0 +1,7 @@
+2020-07-11T06:47:47.5568047+07:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2020-07-11T06:47:47.5821116+07:00  [INF] Hosting environment: "Development" (c3307c92)
+2020-07-11T06:47:47.5822313+07:00  [INF] Content root path: "D:\05. WORK\01. CODE\010. KHCN2020\KHCN.Api" (b5d60022)
+2020-07-11T06:48:34.1007738+07:00 8000018d-0000-fa00-b63f-84710c7967bb [INF] [KHCN_CapBac.GetAllPaging]. Get data success. Time process: 4 seconds. (cfb3a49c)
+2020-07-11T09:06:07.0058312+07:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2020-07-11T09:06:07.0265202+07:00  [INF] Hosting environment: "Development" (c3307c92)
+2020-07-11T09:06:07.0267617+07:00  [INF] Content root path: "D:\05. WORK\01. CODE\010. KHCN2020\KHCN.Api" (b5d60022)

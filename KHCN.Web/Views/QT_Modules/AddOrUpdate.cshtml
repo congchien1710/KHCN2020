@@ -1,0 +1,48 @@
+﻿@model KHCN.Data.Entities.System.CMS_Module
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-users"></i> Thông tin module</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    @using (Html.BeginForm("AddOrUpdate", "QT_Modules", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.Id)
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })<b class="text-red control-label">&nbsp;*</b> @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" }) @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-save"></i> Lưu lại</button>
+                                    <a class="btn btn-sm btn-outline-info" href="@Url.Content("~/admin/loai-san-pham/danh-sach")"><i class="fa fa-reply"></i> Quay lại</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

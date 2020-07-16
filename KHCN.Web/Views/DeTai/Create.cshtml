@@ -1,0 +1,140 @@
+﻿@model KHCN.Data.Entities.DeTai
+
+@{
+    ViewData["Title"] = "Thông tin DeTai";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-users"></i> Thông tin cơ quan</h3>
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm("AddOrUpdate", "DeTai", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        @Html.HiddenFor(model => model.Id)
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CreatedDate, htmlAttributes: new { @class = "control-label" }) <b class="text-red control-label">&nbsp;*</b>
+                        <div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1"><i class="far fa-calendar-alt" aria-hidden="true"></i></span>
+                                </div>
+                                @Html.TextBoxFor(model => model.CreatedDate, new { @class = "form-control datepicker", autocomplete = "off" })
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.CreatedDate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CreatedBy, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.CreatedBy, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CreatedBy, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UpdatedDate, htmlAttributes: new { @class = "control-label" }) <b class="text-red control-label">&nbsp;*</b>
+                        <div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1"><i class="far fa-calendar-alt" aria-hidden="true"></i></span>
+                                </div>
+                                @Html.TextBoxFor(model => model.UpdatedDate, new { @class = "form-control datepicker", autocomplete = "off" })
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.UpdatedDate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UpdatedBy, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.UpdatedBy, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.UpdatedBy, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IdNganh, htmlAttributes: new { @class = "control-label" }) <b class="text-red control-label">&nbsp;*</b>
+                        @Html.DropDownListFor(model => model.IdNganh, ViewBag.DDLNGANH as SelectList, "--- Lựa chọn ---", new { @class = "form-control select2 select2bs4", @width = "100%" })
+                        @Html.ValidationMessageFor(model => model.IdNganh, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IdLoaiNhiemVu, htmlAttributes: new { @class = "control-label" }) <b class="text-red control-label">&nbsp;*</b>
+                        @Html.DropDownListFor(model => model.IdLoaiNhiemVu, ViewBag.DDLLOAINHIEMVU as SelectList, "--- Lựa chọn ---", new { @class = "form-control select2 select2bs4", @width = "100%" })
+                        @Html.ValidationMessageFor(model => model.IdLoaiNhiemVu, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TenNhiemVu, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.TenNhiemVu, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.TenNhiemVu, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NamPheDuyet, htmlAttributes: new { @class = "control-label" }) <b class="text-red control-label">&nbsp;*</b>
+                        @Html.TextBoxFor(model => model.NamPheDuyet, new { @class = "form-control numeric", type = "number" })
+                        @Html.ValidationMessageFor(model => model.NamPheDuyet, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NamHoanThanh, htmlAttributes: new { @class = "control-label" }) <b class="text-red control-label">&nbsp;*</b>
+                        @Html.TextBoxFor(model => model.NamHoanThanh, new { @class = "form-control numeric", type = "number" })
+                        @Html.ValidationMessageFor(model => model.NamHoanThanh, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.MaSoNhiemVu, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.MaSoNhiemVu, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.MaSoNhiemVu, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IdCapQuanLy, htmlAttributes: new { @class = "control-label" }) <b class="text-red control-label">&nbsp;*</b>
+                        @Html.DropDownListFor(model => model.IdCapQuanLy, ViewBag.DDLCAPQUANLY as SelectList, "--- Lựa chọn ---", new { @class = "form-control select2 select2bs4", @width = "100%" })
+                        @Html.ValidationMessageFor(model => model.IdCapQuanLy, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ChuNhiemNhiemVu, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.ChuNhiemNhiemVu, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ChuNhiemNhiemVu, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EmailChuNhiem, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.EmailChuNhiem, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.EmailChuNhiem, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IdTienDoNhiemVu, htmlAttributes: new { @class = "control-label" }) <b class="text-red control-label">&nbsp;*</b>
+                        @*@Html.DropDownListFor(model => model.IdTienDoNhiemVu, ViewBag.DDLTIENDONHIEMVU as SelectList, "--- Lựa chọn ---", new { @class = "form-control select2 select2bs4", @width = "100%" })*@
+                        @Html.ValidationMessageFor(model => model.IdTienDoNhiemVu, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SanPhamNhiemVu, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.SanPhamNhiemVu, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.SanPhamNhiemVu, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Lưu lại</button>
+                        <a class="btn btn-outline-info" href="@Url.Content("~/DeTai/Index")"><i class="fa fa-reply"></i> Quay lại</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+}

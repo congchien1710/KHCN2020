@@ -1,0 +1,174 @@
+﻿@{
+    ViewData["Title"] = "Phân quyền Api";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header" style="background: #f5f5f5;">
+                <h3 class="card-title text-left"><i class="fa fa-users"></i> Nhóm người dùng</h3>
+                <div class="card-tools">
+                    <button class="btn btn-sm btn-info" style="display: none">Lưu</button>
+                    <input style="display: none" type="hidden" value="0" id="RoleID" />
+                </div>
+            </div>
+            <div class="card-body p-0" id="tbl-role">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header" style="background: #f5f5f5;">
+                <h3 class="card-title text-left"><i class="fa fa-cogs"></i> Phân quyền Api</h3>
+                <div class="card-tools">
+                    <button class="btn btn-default btn-tool" title="Lưu" onclick="saveFunc()"><i class="fa fa-cloud-download-alt text-success"></i><b class="text-success"> Lưu lại</b></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-xs-2">
+                                <label class="control-label">Module</label>
+                            </div>
+                            <div class="col-xs-10">
+                                <select class="form-control select2 select2bs4" id="lmodule"></select>
+                            </div>
+                        </div>
+                        <div class="form-group" id="jsTreeFuncP" style="max-height: 608px; overflow-y: auto;">
+                            <div class="col-xs-12">
+                                <div id="jsTreeFunc"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(function () {
+            AJAXGetDataPermissionApi();
+            $("#lmodule").change(function () {
+                if (ROLEID != 0) {
+                    selectRole(ROLEID);
+                }
+            });
+        });
+
+        function AJAXGetDataPermissionApi() {
+            $.ajax({
+                url: '@Url.Action("GetDataPermissionApi", "QT_RoleManager")',
+                data: null,
+                type: "POST",
+                success: function (r) {
+                    if (r.state == true) {
+                        bindDataRole(r.data.lRole);
+                        bindListModule(r.data.lModule);
+                    }
+                },
+                error: function (err) {
+                    alert("Error:");
+                }
+            });
+        }
+
+        function bindListModule(data) {
+            var content = '';
+            for (var i = 0; i < data.length; i++) {
+                content += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+            }
+            $('#lmodule').html(content);
+        }
+
+        function bindDataRole(data) {
+            var content = '';
+            content += '<ul class="nav nav-pills flex-column">';
+            for (var i = 0; i < data.length; i++) {
+                content += '<li class="nav-item">';
+                content += '<a name="' + data[i].id + '" style="cursor: pointer" class="nav-link" onclick="selectRole(' + data[i].id + ')">' + data[i].name + '</a>';
+                content += '</li>';
+            }
+            content += '</ul>';
+
+            $('#tbl-role').html(content);
+        }
+
+        function bindDataPage(data) {
+            var content = '';
+            var moduleid = 0;
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].idmodule != moduleid) {
+                    content += '<h5 style="font-style: italic; text-align: center;">---- ' + data[i].modulename + ' ----</h5>';
+                    moduleid = data[i].idmodule;
+                }
+                content += '<li class="list-group-item" id="page_' + data[i].id + '" name="' + data[i].id + '">' + data[i].name + '</li>';
+            }
+            $('#ul-page').html(content);
+        }
+
+        var ROLEID = 0;
+        function selectRole(RoleID) {
+            ROLEID = RoleID;
+            $("#tbl-role ul li a.active").removeClass('active');
+            $('#tbl-role ul li a[name="' + RoleID + '"]').addClass('active');
+            $('#RoleID').val(RoleID);
+            var moduleid = $('#lmodule').val();
+            var pJson = { 'idRole': RoleID, 'idModule': moduleid };
+            $.ajax({
+                url: '@Url.Action("GetPermissionApiByRole", "QT_RoleManager")',
+                data: pJson,
+                type: "POST",
+                success: function (r) {
+                    if (r.state == true) {
+                        $('#jsTreeFuncP').html('<div id="jsTreeFunc"></div>');
+                        $('#jsTreeFunc').jstree({
+                            'core': {
+                                'data': r.data.jsTreeListF
+                            },
+                            "checkbox": {
+                                "keep_selected_style": false,
+                                "three_state": false,
+                                "cascade": "undetermined"
+                            },
+                            "plugins": ["checkbox"]
+                        });
+                    }
+                }
+            });
+        }
+
+        function saveFunc() {
+            var RoleID = $('#RoleID').val();
+            var ModuleID = $('#lmodule').val();
+            var selectedElmsIds = $('#jsTreeFunc').jstree("get_selected");
+            $("#jsTreeFunc").find(".jstree-undetermined").each(function (i, element) {
+                selectedElmsIds.push($(element).closest('.jstree-node').attr("id"));
+            });
+            if (RoleID == 0) {
+                MsgWarning('Chưa chọn nhóm người dùng!');
+            }
+            else {
+                var pJson = { 'idRole': RoleID, 'idModule': ModuleID, 'idsApi': selectedElmsIds.toString() };
+                $.ajax({
+                    url: '@Url.Action("SaveRoleApi", "QT_RoleManager")',
+                    data: pJson,
+                    type: "POST",
+                    success: function (r) {
+                        if (r.state == true) {
+                            MsgSuccess(r.message);
+                        }
+                        else {
+                            MsgError(r.message);
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+}

@@ -1,0 +1,69 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Entities\CapQuanLy.cs" />
+    <Compile Remove="Entities\DeTai.cs" />
+    <Compile Remove="Entities\HoSoDieuChinh.cs" />
+    <Compile Remove="Entities\HoSoNghiemThu.cs" />
+    <Compile Remove="Entities\HoSoQuyetToan.cs" />
+    <Compile Remove="Entities\HoSoXetDuyet.cs" />
+    <Compile Remove="Entities\KinhPhiThucHien.cs" />
+    <Compile Remove="Entities\LoaiNhiemVu.cs" />
+    <Compile Remove="Entities\Milestone.cs" />
+    <Compile Remove="Entities\Nganh.cs" />
+    <Compile Remove="Entities\ThoiGianThucHien.cs" />
+    <Compile Remove="Migrations\20200704130353_1.cs" />
+    <Compile Remove="Migrations\20200704130353_1.Designer.cs" />
+    <Compile Remove="Migrations\20200712061730_12071.cs" />
+    <Compile Remove="Migrations\20200712061730_12071.Designer.cs" />
+    <Compile Remove="Repository\CapQuanLyRepository.cs" />
+    <Compile Remove="Repository\DeTaiRepository.cs" />
+    <Compile Remove="Repository\HoSoDieuChinhRepository.cs" />
+    <Compile Remove="Repository\HoSoNghiemThuRepository.cs" />
+    <Compile Remove="Repository\HoSoQuyetToanRepository.cs" />
+    <Compile Remove="Repository\HoSoXetDuyetRepository.cs" />
+    <Compile Remove="Repository\KinhPhiThucHienRepository.cs" />
+    <Compile Remove="Repository\LoaiNhiemVuRepository.cs" />
+    <Compile Remove="Repository\NganhRepository.cs" />
+    <Compile Remove="Repository\ThoiGianThucHienRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.4" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.3" />
+    <PackageReference Include="ServiceStack.Core" Version="5.8.0" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,4 @@
+2020-07-10T20:40:32.0319927+07:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2020-07-10T20:40:32.0388047+07:00  [INF] Hosting environment: "Development" (c3307c92)
+2020-07-10T20:40:32.0389831+07:00  [INF] Content root path: "D:\05. WORK\01. CODE\010. KHCN2020\KHCN.Api" (b5d60022)
+2020-07-10T20:40:58.7812063+07:00 800000c1-0002-ef00-b63f-84710c7967bb [INF] Login success from username admin. Time process: 2 seconds. (218d3f4a)

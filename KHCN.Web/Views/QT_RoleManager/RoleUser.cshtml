@@ -1,0 +1,228 @@
+﻿@model IEnumerable<KHCN.Data.Entities.System.CMS_UserRole>
+@{
+    ViewBag.Title = "Quản trị quyền người dùng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header with-border" style="background: #f5f5f5;">
+                <h5 class="card-title"><i class="fa fa-users"></i> Người dùng hệ thống</h5>
+            </div>
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="row form-group">
+                        <div class="col-md-1">
+                            <button id="checkAllNotInGroup" title="Chọn tất cả" class="btn btn-active CSFtooltip"><span class="fa fa-check-square text-success"></span></button>
+                        </div>
+                        <div class="col-md-offset-1 col-md-7">
+                            <input id="ipSearch" type="text" placeholder="Tìm kiếm..." class="form-control" name="name" />
+                            <input id="ipRoleID" type="hidden" name="RoleID" value="0" />
+                        </div>
+                        <div class="col-md-3">
+                            <button id="btnTimKiem" onclick="searchForm()" title="Tìm kiếm" class="btn btn-info"><span class="fa fa-search-plus"></span></button>
+                            <button onclick="clearForm()" type="submit" title="Hủy" class="btn btn-default"><span class="fa fa-times"></span></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+
+                </div>
+                <div class="divScroll" id="divUsersNotInGroup">
+                    @{
+                        System.Collections.Generic.List<KHCN.Data.Entities.System.CMS_User> lstUsers = (System.Collections.Generic.List<KHCN.Data.Entities.System.CMS_User>)ViewBag.USERDATA;
+
+                    }
+                    @if (lstUsers != null && lstUsers.Count > 0)
+                    {
+                        for (int i = 0; i < lstUsers.Count; i++)
+                        {
+                            <div class="checkbox userGroup">
+                                <label title="@lstUsers[i].UserName" class="CSFtooltip" style="font-weight: 500">
+                                    <input id="chkUser_@lstUsers[i].Id" value="@lstUsers[i].Id" name="chkUsersNotInGroup" type="checkbox">&nbsp;@lstUsers[i].FullName
+                                </label>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card-body" style="text-align: center">
+            <button id="btnNext1" title="Gán người dùng" onclick="setUserInGroup()" class="btn btn-default"><span class="fa fa-chevron-right"></span></button><br /><br />
+            <button id="btnPrev1" title="Gỡ người dùng" onclick="setUserOutGroup()" class="btn btn-default"><span class="fa fa-chevron-left"></span></button><br /><br />
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header with-border" style="background: #f5f5f5;">
+                <h5 class="card-title"><i class="fa fa-cogs"></i> Người dùng đã được gán vào nhóm</h5>
+            </div>
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        @{
+                            System.Collections.Generic.List<KHCN.Data.Entities.System.CMS_Role> lstRoles = (System.Collections.Generic.List<KHCN.Data.Entities.System.CMS_Role>)ViewBag.ROLEDATA;
+                            TempData.Keep("Roles");
+                        }
+                        <select id="ddlRoles" name="ddlRoles" class="form-control select2 select2bs4">
+                            <option id="ddl_0" value="0" selected="selected">-- Chọn nhóm --</option>
+                            @if (lstRoles != null && lstRoles.Count > 0)
+                            {
+                                for (int i = 0; i < lstRoles.Count; i++)
+                                {
+                                    <option id="ddl_@lstRoles[i].Id" value="@lstRoles[i].Id">&nbsp;@lstRoles[i].Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="divScroll" id="divUsersInGroup"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            //Sự kiện nút chọn tất cả
+            $('#checkAllNotInGroup:button').click(function () {
+                var checked = !$(this).data('checked');
+                $('input[name="chkUsersNotInGroup"]:checkbox').prop('checked', checked);
+                $(this).val(checked ? 'uncheck all' : 'check all')
+                $(this).data('checked', checked);
+            });
+
+            $('#checkAllInGroup:button').click(function () {
+                var checked = !$(this).data('checked');
+                $('input[name="chkUsersInGroup"]:checkbox').prop('checked', checked);
+                $(this).val(checked ? 'uncheck all' : 'check all')
+                $(this).data('checked', checked);
+            });
+
+            //Sự kiện ddlRoles onchange
+            $("#ddlRoles").change(function () {
+                var strRoleID = $(this).val();
+                $('#ipRoleID').val(strRoleID);
+
+                $('#lbxUserRole').find('option').remove();
+                $('#lbxUsers').find('option').remove();
+
+                AJAXGetUsersGroup($('#ipSearch').val(), strRoleID);
+            });
+
+        });
+
+        function clearForm() {
+            $('#ipSearch').val("");
+            searchForm();
+        }
+
+        function searchForm() {
+            var name = $('#ipSearch').val();
+            var strRoleID = $("#ddlRoles").val();
+            AJAXGetUsersGroup(name, strRoleID);
+        }
+
+        function AJAXGetUsersGroup(name, strRoleID) {
+            try {
+                var pJson = { 'Name': name, 'RoleID': strRoleID };
+                $.ajax({
+                    url: '@Url.Action("GetUsersGroup", "QT_RoleManager")',
+                    data: pJson,
+                    type: "POST",
+                    success: function (response) {
+                        //console.log(response);
+                        var listUserNotInGroup = response.data.listUserNotInGroup;
+                        var listUserInGroup = response.data.listUserInGroup;
+                        //fill user not in group
+                        var options = '';
+                        $.each(listUserNotInGroup, function (i, item) {
+                            options += "<div class='checkbox userGroup'><label title ='" + item.userName + "' class='CSFtooltip' style='font-weight: 500'><input id='chkUser_" + item.id + "' value='" + item.id + "' name='chkUsersNotInGroup' type='checkbox'>&nbsp;" + item.fullName + "</label></div>";
+                        });
+                        $('#divUsersNotInGroup').html(options);
+
+                        //fill user in group
+                        options = '';
+                        $.each(listUserInGroup, function (i, item) {
+                            options += "<div class='checkbox userGroup'><label title ='" + item.userName + "' class='CSFtooltip' style='font-weight: 500'><input id='chkUser_" + item.id + "' value='" + item.id + "' name='chkUsersInGroup' type='checkbox'>&nbsp;" + item.fullName + "</label></div>";
+                        });
+                        $('#divUsersInGroup').html(options);
+                    }
+                });
+            } catch (e) {
+                MsgError(e);
+                return false;
+            }
+        }
+
+        function setUserInGroup() {
+            try {
+                var checkedValues = $('input[name="chkUsersNotInGroup"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var RoleID = $("#ddlRoles").val()
+                if (checkedValues.length == 0 || RoleID == 0) {
+                    MsgWarning("Bạn chưa chọn người dùng hoặc nhóm người dùng!");
+                    return false;
+                }
+
+                var pJson = { 'arrChecked': checkedValues, 'RoleID': RoleID };
+                $.ajax({
+                    url: '@Url.Action("SetUsersInGroup", "QT_RoleManager")',
+                    data: pJson,
+                    type: "POST",
+                    success: function (response) {
+                        if (response.state == true) {
+                            MsgSuccess("Gán người dùng thành công");
+                            AJAXGetUsersGroup($('#ipSearch').val(), RoleID);
+                        }
+                        else {
+                            MsgError("Lỗi gán người dùng");
+                        }
+                    }
+                });
+            } catch (e) {
+                MsgError(e);
+                return false;
+            }
+        }
+
+        function setUserOutGroup() {
+            try {
+                var checkedValues = $('input[name="chkUsersInGroup"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var RoleID = $("#ddlRoles").val()
+                if (checkedValues.length == 0 || RoleID == 0) {
+                    alertErrMessage("Bạn chưa chọn người dùng hoặc nhóm người dùng!");
+                    return false;
+                }
+
+                var pJson = { 'arrChecked': checkedValues, 'RoleID': RoleID };
+                $.ajax({
+                    url: '@Url.Action("SetUsersOutGroup", "QT_RoleManager")',
+                    data: pJson,
+                    type: "POST",
+                    success: function (response) {
+                        if (response.state == true) {
+                            MsgSuccess("Gỡ người dùng khỏi nhóm thành công");
+                            AJAXGetUsersGroup($('#ipSearch').val(), RoleID);
+                        }
+                        else {
+                            MsgError("Lỗi gỡ người dùng");
+                        }
+                    }
+                });
+            } catch (e) {
+                MsgError(e);
+                return false;
+            }
+        }
+    </script>
+}

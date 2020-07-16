@@ -1,0 +1,82 @@
+﻿@model IEnumerable<KHCN.Data.DTOs.System.CMS_Api_DTO>
+
+@{
+    ViewData["Title"] = "Quản trị API";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-users"></i> Danh sách API</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <a class="btn btn-sm btn-success" title="Thêm mới" href="@Url.Content("~/QT_Api/AddOrUpdate")"><i class="fa fa-plus-square"></i> Thêm mới</a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <table id="" class="table table-bordered table-hover nowrap" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">STT</th>
+                                    <th class="text-center">Tên Api</th>
+                                    <th class="text-center">Api cha</th>
+                                    <th class="text-center">Controller-Action</th>
+                                    <th class="text-center">Module</th>
+                                    <th class="text-center">Trạng thái</th>
+                                    <th class="text-center">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var i = 0;
+                                    var index = 0;
+                                }
+                                @foreach (var item in Model)
+                                {
+                                    i++;
+                                    index++;
+
+                                    if (item.IdParent == 0)
+                                    {
+                                        <tr id="row_@item.Id" class="bg-gray-light text-bold">
+                                        <td align="center">@index</td>
+                                        <td class="text-primary">@item.Name</td>
+                                        <td>@item.NameParent</td>
+                                        <td>@item.ControllerAction</td>
+                                        <td>@item.NameModule</td>
+                                        <td align="center"><input type="checkbox" checked="@item.IsActive"></td>
+                                        <td align="center">
+                                            <a href="@Url.Content("~/QT_Api/AddOrUpdate/")@item.Id" type="button" title="Sửa"><span class="fa fa-edit text-info"></span></a>
+                                            <a style="cursor: pointer" onclick="del(@item.Id)" title="Xóa"><span class="fa fa-trash-alt text-danger"></span></a>
+                                        </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr id="row_@item.Id">
+                                        <td align="center">@index</td>
+                                        <td> --- @item.Name</td>
+                                        <td>@item.NameParent</td>
+                                        <td>@item.ControllerAction</td>
+                                        <td>@item.NameModule</td>
+                                        <td align="center"><input type="checkbox" checked="@item.IsActive"></td>
+                                        <td align="center">
+                                            <a href="@Url.Content("~/QT_Api/AddOrUpdate/")@item.Id" type="button" title="Sửa"><span class="fa fa-edit text-info"></span></a>
+                                            <a style="cursor: pointer" onclick="del(@item.Id)" title="Xóa"><span class="fa fa-trash-alt text-danger"></span></a>
+                                        </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

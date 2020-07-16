@@ -1,0 +1,98 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>KHCN.Web</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\CapQuanLy\**" />
+    <Compile Remove="Views\DeTai\**" />
+    <Compile Remove="Views\HoSoDieuChinh\**" />
+    <Compile Remove="Views\HoSoNghiemThu\**" />
+    <Compile Remove="Views\HoSoQuyetToan\**" />
+    <Compile Remove="Views\HoSoXetDuyet\**" />
+    <Compile Remove="Views\KinhPhiThucHien\**" />
+    <Compile Remove="Views\LoaiNhiemVu\**" />
+    <Compile Remove="Views\Nganh\**" />
+    <Compile Remove="Views\ThoiGianThucHien\**" />
+    <Content Remove="Views\CapQuanLy\**" />
+    <Content Remove="Views\DeTai\**" />
+    <Content Remove="Views\HoSoDieuChinh\**" />
+    <Content Remove="Views\HoSoNghiemThu\**" />
+    <Content Remove="Views\HoSoQuyetToan\**" />
+    <Content Remove="Views\HoSoXetDuyet\**" />
+    <Content Remove="Views\KinhPhiThucHien\**" />
+    <Content Remove="Views\LoaiNhiemVu\**" />
+    <Content Remove="Views\Nganh\**" />
+    <Content Remove="Views\ThoiGianThucHien\**" />
+    <EmbeddedResource Remove="Views\CapQuanLy\**" />
+    <EmbeddedResource Remove="Views\DeTai\**" />
+    <EmbeddedResource Remove="Views\HoSoDieuChinh\**" />
+    <EmbeddedResource Remove="Views\HoSoNghiemThu\**" />
+    <EmbeddedResource Remove="Views\HoSoQuyetToan\**" />
+    <EmbeddedResource Remove="Views\HoSoXetDuyet\**" />
+    <EmbeddedResource Remove="Views\KinhPhiThucHien\**" />
+    <EmbeddedResource Remove="Views\LoaiNhiemVu\**" />
+    <EmbeddedResource Remove="Views\Nganh\**" />
+    <EmbeddedResource Remove="Views\ThoiGianThucHien\**" />
+    <None Remove="Views\CapQuanLy\**" />
+    <None Remove="Views\DeTai\**" />
+    <None Remove="Views\HoSoDieuChinh\**" />
+    <None Remove="Views\HoSoNghiemThu\**" />
+    <None Remove="Views\HoSoQuyetToan\**" />
+    <None Remove="Views\HoSoXetDuyet\**" />
+    <None Remove="Views\KinhPhiThucHien\**" />
+    <None Remove="Views\LoaiNhiemVu\**" />
+    <None Remove="Views\Nganh\**" />
+    <None Remove="Views\ThoiGianThucHien\**" />
+    <TypeScriptCompile Remove="Views\CapQuanLy\**" />
+    <TypeScriptCompile Remove="Views\DeTai\**" />
+    <TypeScriptCompile Remove="Views\HoSoDieuChinh\**" />
+    <TypeScriptCompile Remove="Views\HoSoNghiemThu\**" />
+    <TypeScriptCompile Remove="Views\HoSoQuyetToan\**" />
+    <TypeScriptCompile Remove="Views\HoSoXetDuyet\**" />
+    <TypeScriptCompile Remove="Views\KinhPhiThucHien\**" />
+    <TypeScriptCompile Remove="Views\LoaiNhiemVu\**" />
+    <TypeScriptCompile Remove="Views\Nganh\**" />
+    <TypeScriptCompile Remove="Views\ThoiGianThucHien\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\CapQuanLyController.cs" />
+    <Compile Remove="Controllers\DeTaiController.cs" />
+    <Compile Remove="Controllers\HoSoDieuChinhController.cs" />
+    <Compile Remove="Controllers\HoSoNghiemThuController.cs" />
+    <Compile Remove="Controllers\HoSoQuyetToanController.cs" />
+    <Compile Remove="Controllers\HoSoXetDuyetController.cs" />
+    <Compile Remove="Controllers\KinhPhiThucHienController.cs" />
+    <Compile Remove="Controllers\LoaiNhiemVuController.cs" />
+    <Compile Remove="Controllers\NganhController.cs" />
+    <Compile Remove="Controllers\ThoiGianThucHienController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
+    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.7.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\KHCN.Api\KHCN.Api.csproj" />
+    <ProjectReference Include="..\KHCN.Service\KHCN.Service.csproj" />
+  </ItemGroup>
+
+
+
+</Project>

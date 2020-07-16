@@ -1,0 +1,256 @@
+﻿@{
+    ViewData["Title"] = "Phân quyền";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header" style="background: #f5f5f5;">
+                <h3 class="card-title text-left"><i class="fa fa-users"></i> Nhóm người dùng</h3>
+                <div class="card-tools">
+                    <button class="btn btn-sm btn-info" style="display: none">Lưu</button>
+                    <input style="display: none" type="hidden" value="0" id="RoleID" />
+                </div>
+            </div>
+            <div class="card-body p-0" id="tbl-role">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header" style="background: #f5f5f5;">
+                <h3 class="card-title text-left"><i class="fa fa-cogs"></i> Phân quyền chức năng</h3>
+                <div class="card-tools">
+                    <button class="btn btn-default btn-tool" title="Lưu" onclick="saveFunc()"><i class="fa fa-cloud-download-alt text-success"></i><b class="text-success"> Lưu lại</b></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-xs-2">
+                                <label class="control-label">Module</label>
+                            </div>
+                            <div class="col-xs-10">
+                                <select class="form-control select2 select2bs4" id="lmodule"></select>
+                            </div>
+                        </div>
+                        <div class="form-group" id="jsTreeFuncP" style="max-height: 608px; overflow-y: auto;">
+                            <div class="col-xs-12">
+                                <div id="jsTreeFunc"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header" style="background: #f5f5f5;">
+                <h3 class="card-title text-left"><i class="fa fa-clone"></i> Phân quyền trang</h3>
+                <div class="card-tools">
+                    <button class="btn btn-default btn-tool" title="Lưu" onclick="savePage()"><i class="fa fa-cloud-download-alt text-success"></i><b class="text-success"> Lưu lại</b></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-xs-2">
+                                <label class="control-label">Trang</label>
+                            </div>
+                            <div class="col-xs-10">
+                                <select class="form-control select2 select2bs4" id="lpage">
+                                    @*<option value="false">Trang chủ</option>*@
+                                    <option value="true">Trang quản trị</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" id="jsTreeContentP" style="max-height: 608px; overflow-y: auto;">
+                            <div class="col-xs-12">
+                                <div id="jsTreeContent"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(function () {
+            //mergeColumn('tbl-quyen');
+            AJAXGetDataPermission();
+            $("#lmodule").change(function () {
+                if (ROLEID != 0) {
+                    selectRole(ROLEID);
+                }
+            });
+            $("#lpage").change(function () {
+                if (ROLEID != 0) {
+                    selectRole(ROLEID);
+                }
+            });
+        });
+
+        function AJAXGetDataPermission() {
+            $.ajax({
+                url: '@Url.Action("GetDataPermission", "QT_RoleManager")',
+                data: null,
+                type: "POST",
+                success: function (r) {
+                    if (r.state == true) {
+                        bindDataRole(r.data.lRole);
+                        bindListModule(r.data.lModule);
+                    }
+                },
+                error: function (err) {
+                    alert("Error:");
+                }
+            });
+        }
+
+        function bindListModule(data) {
+            var content = '';
+            for (var i = 0; i < data.length; i++) {
+                content += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+            }
+            $('#lmodule').html(content);
+        }
+
+        function bindDataRole(data) {
+            var content = '';
+            content += '<ul class="nav nav-pills flex-column">';
+            for (var i = 0; i < data.length; i++) {
+                content += '<li class="nav-item">';
+                content += '<a name="' + data[i].id + '" style="cursor: pointer" class="nav-link" onclick="selectRole(' + data[i].id + ')">' + data[i].name + '</a>';
+                content += '</li>';
+            }
+            content += '</ul>';
+
+            $('#tbl-role').html(content);
+        }
+
+        function bindDataPage(data) {
+            var content = '';
+            var moduleid = 0;
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].idmodule != moduleid) {
+                    content += '<h5 style="font-style: italic; text-align: center;">---- ' + data[i].modulename + ' ----</h5>';
+                    moduleid = data[i].idmodule;
+                }
+                content += '<li class="list-group-item" id="page_' + data[i].id + '" name="' + data[i].id + '">' + data[i].name + '</li>';
+            }
+            $('#ul-page').html(content);
+        }
+
+        var ROLEID = 0;
+        function selectRole(RoleID) {
+            ROLEID = RoleID;
+            $("#tbl-role ul li a.active").removeClass('active');
+            $('#tbl-role ul li a[name="' + RoleID + '"]').addClass('active');
+            $('#RoleID').val(RoleID);
+            var moduleid = $('#lmodule').val();
+            var isadmin = $('#lpage').val();
+            var pJson = { 'idRole': RoleID, 'idModule': moduleid, 'isadmin': isadmin };
+            $.ajax({
+                url: '@Url.Action("GetPermissionByRole", "QT_RoleManager")',
+                data: pJson,
+                type: "POST",
+                success: function (r) {
+                    if (r.state == true) {
+                        //////build tree page
+                        $('#jsTreeContentP').html('<div id="jsTreeContent"></div>');
+                        $('#jsTreeContent').jstree({
+                            'core': {
+                                'data': r.data.jsTreeList
+                            },
+                            "checkbox": {
+                                "keep_selected_style": false,
+                                "three_state": false,
+                                "cascade": "undetermined"
+                            },
+                            "plugins": ["checkbox"]
+                        });
+
+                        //////build tree function
+                        $('#jsTreeFuncP').html('<div id="jsTreeFunc"></div>');
+                        $('#jsTreeFunc').jstree({
+                            'core': {
+                                'data': r.data.jsTreeListF
+                            },
+                            "checkbox": {
+                                "keep_selected_style": false,
+                                "three_state": false,
+                                "cascade": "undetermined"
+                            },
+                            "plugins": ["checkbox"]
+                        });
+                    }
+                }
+            });
+        }
+
+        function saveFunc() {
+            var RoleID = $('#RoleID').val();
+            var ModuleID = $('#lmodule').val();
+            var selectedElmsIds = $('#jsTreeFunc').jstree("get_selected");
+            $("#jsTreeFunc").find(".jstree-undetermined").each(function (i, element) {
+                selectedElmsIds.push($(element).closest('.jstree-node').attr("id"));
+            });
+            if (RoleID == 0) {
+                MsgWarning('Chưa chọn nhóm người dùng!');
+            }
+            else {
+                var pJson = { 'idRole': RoleID, 'idModule': ModuleID, 'idsFunction': selectedElmsIds.toString() };
+                $.ajax({
+                    url: '@Url.Action("SaveRoleFunction", "QT_RoleManager")',
+                    data: pJson,
+                    type: "POST",
+                    success: function (r) {
+                        if (r.state == true) {
+                            MsgSuccess(r.message);
+                        }
+                        else {
+                            MsgError(r.message);
+                        }
+                    }
+                });
+            }
+        }
+
+        function savePage() {
+            var isadmin = $('#lpage').val();
+            var selectedElmsIds = $('#jsTreeContent').jstree("get_selected");
+            $("#jsTreeContent").find(".jstree-undetermined").each(function (i, element) {
+                selectedElmsIds.push($(element).closest('.jstree-node').attr("id"));
+            });
+            var RoleID = $('#RoleID').val();
+            if (RoleID == 0) {
+                alertWarning('Chưa chọn nhóm người dùng!');
+            }
+            else {
+                var pJson = { 'idRole': RoleID, 'idsPage': selectedElmsIds.toString(), 'isadmin': isadmin };
+                $.ajax({
+                    url: '@Url.Action("SaveRolePage", "QT_RoleManager")',
+                    data: pJson,
+                    type: "POST",
+                    success: function (r) {
+                        if (r.state == true) {
+                            MsgSuccess(r.message);
+                        }
+                        else {
+                            MsgError(r.message);
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+}

@@ -1,0 +1,115 @@
+﻿@model KHCN.Data.Entities.System.CMS_User
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-users"></i> Thông tin người dùng</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    @using (Html.BeginForm("AddOrUpdate", "QT_Users", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.Id)
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label" })<b class="text-red control-label">&nbsp;*</b> @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
+                                </div>
+
+                                @{
+                                    if (Model == null || Model.Id <= 0)
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" })<b class="text-red control-label">&nbsp;*</b> @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        @*@Html.HiddenFor(model => model.Password)*@
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" })<b class="text-red control-label">&nbsp;*</b> @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                                        </div>
+                                    }
+                                }
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.FullName, htmlAttributes: new { @class = "control-label" })<b class="text-red control-label">&nbsp;*</b> @Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(model => model.FullName, new { @class = "form-control" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })<b class="text-red control-label">&nbsp;*</b> @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Mobile, htmlAttributes: new { @class = "control-label" })<b class="text-red control-label">&nbsp;*</b> @Html.ValidationMessageFor(model => model.Mobile, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(model => model.Mobile, new { @class = "form-control" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label" }) @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+                                </div>
+
+                                @{
+                                    if (Model != null && Model.Id > 0)
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label" }) @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                                            <br />
+                                            @Html.CheckBoxFor(model => model.IsActive, new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                    }
+                                }
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-save"></i> Lưu lại</button>
+                                    <a class="btn btn-sm btn-outline-info" href="@Url.Content("~/admin/loai-san-pham/danh-sach")"><i class="fa fa-reply"></i> Quay lại</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script>
+        function changeController() {
+            var controllerName = $('select[name=Controller] option:selected').val();
+            $.ajax
+                ({
+                    url: '@Url.Action("GetActionByController", "QT_Functions")',
+                    type: 'POST',
+                    data: { controllerName: controllerName },
+                    success: function (result) {
+                        if (result.status == true) {
+                            $("#Action").empty();
+                            $("#Action").append('<option value="">--- Lựa chọn ---</option>')
+                            $.each($.parseJSON(result.data), function (i, item) {
+                                $("#Action").append($('<option></option>').val(item).html(item))
+                            })
+                        }
+                    },
+                    error: function () {
+                        alert("Error! Something went wrong..")
+                    },
+                });
+        }
+</script>
+}
